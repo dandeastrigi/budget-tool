@@ -1,0 +1,44 @@
+<div class="products-table">
+    <form>
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">Cód</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Quantidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of products">
+                <th id="productId" scope="row">{{ product.id }}</th>
+                <td>{{ product.description }}</td>
+                <td>{{ this.fmtPrice(product.price) }}</td>
+                <td><input class="key-{{ product.id }}" type="number" min="0" (change)="this.onChangeQty($event)"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="row">Total de produtos</th>
+                <td>{{ this.fmtPrice(total) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="financing-row">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        <h6>Parcelamento</h6>
+        <select class="custom-select">
+            <option selected>Selecione o parcelamento</option>
+            <option *ngFor="let installment of financing">{{ installment.installments_qty }}x</option>
+        </select>
+    </div>
+    <hr/>
+    <button type="submit" class="btn btn-primary" (click)="handleConfirm(this)">Confirmar</button>
+</form>
+<hr/>
+<button class="btn btn-primary" (click)="handleServiceStatus()">Status do serviço</button>
+</div>
