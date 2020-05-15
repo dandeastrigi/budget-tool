@@ -1,5 +1,11 @@
 <div class="products-table">
-    <form>
+    <div *ngIf="this.confirm && this.successCheckout" class="alert alert-primary" role="alert">
+        Solicitação enviada!
+    </div>
+    <div *ngIf="this.confirm && this.total ===0" class="alert alert-warning" role="alert">
+        Por favor, adicione quantidade em ao menos um item!
+    </div>
+    <h3>Orçamento</h3>
     <table class="table">
         <thead>
             <tr>
@@ -37,8 +43,6 @@
         </select>
     </div>
     <hr/>
-    <button type="submit" class="btn btn-primary" (click)="handleConfirm(this)">Confirmar</button>
-</form>
-<hr/>
-<button class="btn btn-primary" (click)="handleServiceStatus()">Status do serviço</button>
+    <button class="btn btn-primary" (click)="handleConfirm()">Confirmar</button>
+    <hr/>
 </div>

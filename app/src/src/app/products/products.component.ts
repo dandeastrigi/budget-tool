@@ -10,10 +10,9 @@ export class ProductsComponent implements OnInit {
   
   products = [];
   financing = [];
-  cart = [];
+  confirm = false;
   total = 0;
-  formData = [];
-  serviceStatus = "";
+  successCheckout = false;
   
   fmtPrice = function(value) {
     return 'R$ '+value.toFixed(2).replace('.', ',')
@@ -44,22 +43,29 @@ export class ProductsComponent implements OnInit {
     }
   }
   
-  handleConfirm = function(e){
-    console.log(e)
+  handleConfirm = function(){
+    this.confirm = true;
+    if(this.total === 0) {
+      return
+    }
+    console.log("A confirm")
+    fetch("http://localhost:8000/add_budget").then((response) => {
+      console.log(response);
+      response.json().then((data) => {
+          console.log(data);
+        });
+    });
   }
   
   alertStatus = function(data){
     window.alert(data)
   }
   
-  handleServiceStatus = function(){
-    fetch("http://localhost:8000/status").then(function(res){
-      if(res.status === 200){
-        window.alert("Serviço funcionando");
-      }
-    })
-  }
   constructor() {
+
+  };
+
+  ngOnInit(): void {
     if(!environment.production) {
       this.products = [
         { id: 1, description: "Módulo Poli 330W", price: 657.3798, quantity: 0},
@@ -77,9 +83,6 @@ export class ProductsComponent implements OnInit {
         { id: 4, installments_qty: 120, tax: 1.39 },
       ]
     }
-  };
-
-  ngOnInit(): void {
   }
 
 }

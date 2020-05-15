@@ -7,6 +7,9 @@
 Inside of the *app* directory run the follow command:
 
 ```bash
+cd src
+npm install
+cd ..
 docker-compose up --build
 ```
 
