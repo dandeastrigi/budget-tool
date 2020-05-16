@@ -2,8 +2,10 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
+	"server/model"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -26,12 +28,29 @@ func TestDatabaseService() {
 	}
 }
 
-// Transaction
-func Transaction() {
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://root:123@localhost:27017"))
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	err = client.Connect(ctx)
+// SaveBudget : budget sav
+func SaveBudget(budget model.Budget) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("DATABASE_URI"))
+	// Connect to MongoDB
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Check the connection
+	err = client.Ping(context.TODO(), nil)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	collection := client.Database("budget").Collection("budget")
+
+	insertResult, err := collection.InsertOne(context.TODO(), budget)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
 }

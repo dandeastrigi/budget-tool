@@ -11,44 +11,73 @@
     <div *ngIf="this.serverError" class="alert alert-danger" role="alert">
         Encontramos um problema no servidor, já estamos trabalhando para resolver!
     </div>
-    <h3>Orçamento</h3>
-    <table class="table">
-        <thead>
-            <tr>
-            <th scope="col">Cód</th>
-            <th scope="col">Descrição</th>
-            <th scope="col">Preço</th>
-            <th scope="col">Quantidade</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let product of products">
-                <th id="productId" scope="row">{{ product.id }}</th>
-                <td>{{ product.description }}</td>
-                <td>{{ this.fmtPrice(product.price) }}</td>
-                <td><input class="key-{{ product.id }}" type="number" min="0" (change)="this.onChangeQty($event)"></td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th scope="row">Total de produtos</th>
-                <td>{{ this.fmtPrice(total) }}</td>
-            </tr>
-        </tfoot>
-    </table>
-    <div class="financing-row">
-        <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
+    <div *ngIf="!this.showResult">
+        <h3>Orçamento</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">Cód</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Preço</th>
+                <th scope="col">Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of products">
+                    <th id="productId" scope="row">{{ product.id }}</th>
+                    <td>{{ product.description }}</td>
+                    <td>{{ this.fmtPrice(product.price) }}</td>
+                    <td><input class="key-{{ product.id }}" type="number" min="0" (change)="this.onChangeQty($event)"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="row">Total de produtos</th>
+                    <td>{{ this.fmtPrice(total) }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="financing-row">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+                </div>
             </div>
-          </div>
-        <h6>Parcelamento</h6>
-        <select (change)="this.onChangeInstallment($event)" class="custom-select">
-            <option selected>Selecione o parcelamento</option>
-            <option *ngFor="let installment of installments" value="{{ installment.installments_qty }}">{{ installment.installments_qty }}x</option>
-        </select>
+            <h6>Parcelamento</h6>
+            <select (change)="this.onChangeInstallment($event)" class="custom-select">
+                <option selected>Selecione o parcelamento</option>
+                <option *ngFor="let installment of installments" value="{{ installment.installments_qty }}">{{ installment.installments_qty }}x</option>
+            </select>
+        </div>
+        <hr/>
+        <button type="submit" class="btn btn-primary" (click)="handleSubmit()">Confirmar</button>
+        <hr/>
     </div>
-    <hr/>
-    <button class="btn btn-primary" (click)="handleConfirm()">Confirmar</button>
-    <hr/>
+    <div class="financing-result" *ngIf="this.showResult">
+        <h5>Valores do financiamento</h5>
+        <!-- div id="result">
+            <hr>
+            <label>Número de parcelas</label>
+            <div id="result_qty">{{ this.result.installment_qty }}</div>
+            <label>Valor por parcela</label>
+            <div id="result_installment_value">{{ this.fmtPrice(this.result.installment_value) }}</div>
+            <label>Taxa de juros</label>
+            <div id="result_tax">{{ this.fmtPercent(result.tax) }}</div>
+            <hr/>
+        </ div-->
+        <table class="table">
+            <thead>
+                <th>Nº Parcelas</th>
+                <th>Valor por parcela</th>
+                <th>Taxa de juros</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{{ this.result.installment_qty }}</th>
+                    <th>{{ this.fmtPrice(this.result.installment_value) }}</th>
+                    <th>{{ this.fmtPercent(result.tax) }}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

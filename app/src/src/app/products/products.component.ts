@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { dataService } from '../data.service'
 
+@Injectable()
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -16,9 +19,19 @@ export class ProductsComponent implements OnInit {
   installmentQty = 0;
   successCheckout = false;
   serverError = false;
+  result = {
+    installment_value: 0,
+    installment_qty: 0,
+    tax: 0
+  }
+  showResult = false;
   
   fmtPrice = function(value) {
     return 'R$ '+value.toFixed(2).replace('.', ',')
+  }
+  
+  fmtPercent = function(value) {
+    return value.toFixed(2).replace('.', ',')+'%'
   }
   
   updateTotal = () => {
@@ -35,20 +48,17 @@ export class ProductsComponent implements OnInit {
     this.updateProductQty(prodId, e.target.value)
     this.updateTotal()
   }
-  
+
   updateProductQty = function(prodId, qty){
     for (var i = 0; i < this.products.length; i++){
-      // look for the entry with a matching `code` value
       if (this.products[i].id == prodId){
          this.products[i].quantity = qty;
-         console.log(this.products[i])
       }
     }
   }
   
   onChangeInstallment = function(e){
     for (var i = 0; i < this.installments.length; i++){
-      // look for the entry with a matching `code` value
       if (this.installments[i].installments_qty == e.target.value){
          this.tax = this.installments[i].tax;
       }
@@ -70,14 +80,15 @@ export class ProductsComponent implements OnInit {
       this.tax = 1.39
     }
   }
-  handleConfirm = function(){
+  
+  handleSubmit = function(){
     this.confirm = true;
     if(this.total === 0) {
       return
     }
     
     this.setTax()
-    console.log(this.installmentQty)
+    var obj;
     const rawResponse = fetch('http://localhost:8000/add_budget', {
       method: 'POST',
       body: JSON.stringify({
@@ -85,15 +96,23 @@ export class ProductsComponent implements OnInit {
         "Tax": this.tax, 
         "Installment": this.installmentQty
       })
-    });
+    }).then(res => res.json())
+    .then(data => obj = data)
+    .then(() => this.setShowTestTrue(obj))
   }
   
-  alertStatus = function(data){
-    window.alert(data)
+  setShowTestTrue(obj) {
+    console.log(obj)
+    this.result = {
+      installment_value: obj.InstallmentValue,
+      installment_qty: obj.Installment,
+      tax: obj.Tax
+    }
+    this.showResult = true
   }
-  
 
-  constructor( ) {
+  
+  constructor() {
   };
 
   ngOnInit(): void {

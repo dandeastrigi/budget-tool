@@ -78,6 +78,7 @@ func addBudgetHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("content-type", "application/json")
 	financing = model.CalcInstallments(financing)
+	database.SaveBudget(financing)
 	//concatenated := fmt.Sprintf("{installment_qty: %s, installment_value: %b}", financing.Installment, financing.InstallmentValue)
 	var buf []byte
 	buf, err = json.Marshal(financing)
