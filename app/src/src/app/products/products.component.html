@@ -2,8 +2,14 @@
     <div *ngIf="this.confirm && this.successCheckout" class="alert alert-primary" role="alert">
         Solicitação enviada!
     </div>
-    <div *ngIf="this.confirm && this.total ===0" class="alert alert-warning" role="alert">
+    <div *ngIf="this.confirm && this.total === 0" class="alert alert-warning" role="alert">
         Por favor, adicione quantidade em ao menos um item!
+    </div>
+    <div *ngIf="this.confirm && this.installmentQty === 0" class="alert alert-warning" role="alert">
+        Por favor, selecione o parcelamento!
+    </div>
+    <div *ngIf="this.serverError" class="alert alert-danger" role="alert">
+        Encontramos um problema no servidor, já estamos trabalhando para resolver!
     </div>
     <h3>Orçamento</h3>
     <table class="table">
@@ -37,9 +43,9 @@
             </div>
           </div>
         <h6>Parcelamento</h6>
-        <select class="custom-select">
+        <select (change)="this.onChangeInstallment($event)" class="custom-select">
             <option selected>Selecione o parcelamento</option>
-            <option *ngFor="let installment of financing">{{ installment.installments_qty }}x</option>
+            <option *ngFor="let installment of installments" value="{{ installment.installments_qty }}">{{ installment.installments_qty }}x</option>
         </select>
     </div>
     <hr/>
