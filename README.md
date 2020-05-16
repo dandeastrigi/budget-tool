@@ -4,12 +4,23 @@
 
 ## App
 
-Inside of the *app* directory run the follow command:
+Inside of the *app/src* directory run the follow command:
 
 ```bash
-cd src
 npm install
-cd ..
+```
+
+Back inside of the *app* directory, and run:
+
+```bash
+docker-compose up --build
+```
+
+## Database
+
+Go inside *database* path, then run:
+
+```bash
 docker-compose up --build
 ```
 
@@ -17,6 +28,16 @@ docker-compose up --build
 
 Inside of the *service* directory run the follow command:
 
-```bash
-docker-compose up --build
+```go
+go build .
+go run server.go
 ```
+
+Or you can run:
+
+```bash
+bash start.sh
+```
+
+### Using
+Open your browser at *http://localhost:4200*

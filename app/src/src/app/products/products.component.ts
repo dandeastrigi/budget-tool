@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { dataService } from '../data.service'
 
 @Injectable()
 @Component({
@@ -98,7 +97,7 @@ export class ProductsComponent implements OnInit {
       })
     }).then(res => res.json())
     .then(data => obj = data)
-    .then(() => this.setShowTestTrue(obj))
+    .then(() => this.setShowTestTrue(obj)).catch(function(err){ window.alert("Falha ao conectar com serviço")}  )
   }
   
   setShowTestTrue(obj) {
